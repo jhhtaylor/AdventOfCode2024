@@ -1,0 +1,54 @@
+# .NET build artifacts
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code settings
+.vscode/
+
+# Rider / JetBrains settings
+.idea/
+*.sln.iml
+
+# Logs
+logs/
+*.log
+log*/
+
+# Packages
+*.nupkg
+*.snupkg
+.nuget/
+
+# Publish artifacts
+publish/
+wwwroot/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+*.swn
+
+# Environment-specific settings
+.env
+.env.local
+secrets.json
+
+# macOS system files
+.DS_Store
+
+# SkiaSharp temporary files (if applicable)
+*.skia
+
+# Exclude generated frames and outputs
+Day6Frames/
+Day6Outputs/
+Day6Part2Frames/
+Day6Part2Outputs/
