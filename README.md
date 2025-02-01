@@ -1,4 +1,4 @@
-# AdventCalendar2024
+# AdventOfCode2024
 
 This is a C# console application designed to run solutions for [Advent of Code 2024](https://adventofcode.com/2024). The program allows users to select a specific day's challenge and execute the corresponding solution.
 
@@ -11,8 +11,8 @@ This is a C# console application designed to run solutions for [Advent of Code 2
 ### Running the Program
 1. Clone the repository:
    ```sh
-   git clone https://github.com/yourusername/AdventCalendar2024.git
-   cd AdventCalendar2024
+   git clone https://github.com/yourusername/AdventOfCode2024.git
+   cd AdventOfCode2024
    ```
 
 2. Build the project:
@@ -38,7 +38,7 @@ This is a C# console application designed to run solutions for [Advent of Code 2
 ## Project Structure
 
 ```
-AdventCalendar2024/
+AdventOfCode2024/
 │-- Program.cs        # Entry point of the application
 │-- DayFactory.cs     # Factory pattern for selecting day solutions
 │-- IDay.cs           # Interface for all day solutions
