@@ -87,10 +87,3 @@ public class Day1 : IDay
    ```csharp
    {7, new Day7()}
    ```
-
-## License
-This project is open-source and free to use.
-
----
-
-Let me know if you want any modifications! 🚀
