@@ -1,5 +1,7 @@
 # AdventOfCode2024
 
+![Day 6 Part 2 Visualization](Day6Part2Visualized.gif)
+
 This is a C# console application designed to run solutions for [Advent of Code 2024](https://adventofcode.com/2024). The program allows users to select a specific day's challenge and execute the corresponding solution.
 
 ## Getting Started
