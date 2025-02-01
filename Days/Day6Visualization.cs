@@ -10,7 +10,7 @@ public class Day6Visualization : IDay
     public string Solve()
     {
         string filePath = "Inputs/Day6Input_Example.txt";
-        
+
         if (!File.Exists(filePath))
             return "Error: input.txt not found!";
 
@@ -56,9 +56,11 @@ public class Day6Visualization : IDay
         HashSet<(int x, int y)> visitedPositions = new HashSet<(int x, int y)>();
         visitedPositions.Add((guardX, guardY)); // Include the starting position
 
-        // Directory to save frames
+        // Directory to save frames and videos
         string framesDir = "Day6Frames";
+        string outputsDir = "Day6Outputs";
         Directory.CreateDirectory(framesDir);
+        Directory.CreateDirectory(outputsDir);
 
         // Frame counter
         int frameNumber = 0;
@@ -97,7 +99,7 @@ public class Day6Visualization : IDay
         }
 
         // Compile frames into a video using FFmpeg
-        CompileFramesToVideo(framesDir, "Day6Outputs/output.mp4");
+        CompileFramesToVideo(framesDir, Path.Combine(outputsDir, "output.mp4"));
 
         // Return the number of distinct positions visited
         return visitedPositions.Count.ToString();
