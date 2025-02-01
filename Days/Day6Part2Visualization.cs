@@ -9,7 +9,7 @@ public class Day6Part2Visualization : IDay
     public string Solve()
     {
         string filePath = "Inputs/Day6Input_Example.txt";
-        
+
         if (!File.Exists(filePath))
             return "Error: input.txt not found!";
 
@@ -110,18 +110,21 @@ public class Day6Part2Visualization : IDay
         // Set to track visited positions for visualization
         HashSet<(int x, int y)> visitedPositions = new HashSet<(int x, int y)>();
 
+        // Variable to store the first revisited state (loop start)
+        (int x, int y, int directionIndex)? loopStartState = null;
+
         int guardX = startX;
         int guardY = startY;
         int directionIndex = startDirectionIndex;
 
         // Define direction vectors: up, right, down, left
         var directions = new List<(int dx, int dy, char symbol)>()
-        {
-            (0, -1, '^'), // Up
-            (1, 0, '>'),  // Right
-            (0, 1, 'v'),  // Down
-            (-1, 0, '<')  // Left
-        };
+    {
+        (0, -1, '^'), // Up
+        (1, 0, '>'),  // Right
+        (0, 1, 'v'),  // Down
+        (-1, 0, '<')  // Left
+    };
 
         // Directory to save frames for this obstruction
         string obstructionFramesDir = Path.Combine(framesDir, $"obstruction_{obstructionX}_{obstructionY}");
@@ -130,7 +133,7 @@ public class Day6Part2Visualization : IDay
         // Frame counter
         int frameNumber = 0;
 
-        // Simulate the guard's movement
+        // Simulate the guard's movement to detect the loop start
         while (true)
         {
             // Get the current direction
@@ -142,7 +145,59 @@ public class Day6Part2Visualization : IDay
 
             // Check if the next position is outside the map
             if (nextX < 0 || nextX >= map[0].Length || nextY < 0 || nextY >= map.Count)
-                return false; // Guard has left the map
+                break; // Guard has left the map
+
+            // Check if there is an obstacle at the next position
+            if (map[nextY][nextX] == '#')
+            {
+                // Turn right 90 degrees
+                directionIndex = (directionIndex + 1) % 4;
+            }
+            else
+            {
+                // Move forward
+                guardX = nextX;
+                guardY = nextY;
+                visitedPositions.Add((guardX, guardY)); // Add the new position to the set
+            }
+
+            // Check if the current state has been visited before
+            var currentState = (guardX, guardY, directionIndex);
+            if (visitedStates.Contains(currentState))
+            {
+                // If loopStartState is not set, this is the first revisited state
+                if (loopStartState == null)
+                {
+                    loopStartState = currentState;
+                    Console.WriteLine($"Loop start detected at: ({loopStartState.Value.x}, {loopStartState.Value.y})");
+                }
+                break; // Exit the simulation loop
+            }
+
+            // Add the current state to the set of visited states
+            visitedStates.Add(currentState);
+        }
+
+        // Reset the guard's position and direction for the actual simulation
+        guardX = startX;
+        guardY = startY;
+        directionIndex = startDirectionIndex;
+        visitedStates.Clear();
+        visitedPositions.Clear();
+
+        // Simulate the guard's movement for visualization
+        while (true)
+        {
+            // Get the current direction
+            var (dx, dy, _) = directions[directionIndex];
+
+            // Calculate the next position
+            int nextX = guardX + dx;
+            int nextY = guardY + dy;
+
+            // Check if the next position is outside the map
+            if (nextX < 0 || nextX >= map[0].Length || nextY < 0 || nextY >= map.Count)
+                break; // Guard has left the map
 
             // Check if there is an obstacle at the next position
             if (map[nextY][nextX] == '#')
@@ -159,7 +214,7 @@ public class Day6Part2Visualization : IDay
             }
 
             // Generate and save the current frame
-            SaveFrame(map, guardX, guardY, directions[directionIndex].symbol, visitedPositions, obstructionX, obstructionY, obstructionNumber, Path.Combine(obstructionFramesDir, $"frame_{frameNumber:0000}.png"));
+            SaveFrame(map, guardX, guardY, directions[directionIndex].symbol, visitedPositions, obstructionX, obstructionY, obstructionNumber, loopStartState, Path.Combine(obstructionFramesDir, $"frame_{frameNumber:0000}.png"));
             frameNumber++;
 
             // Check if the current state has been visited before
@@ -174,12 +229,14 @@ public class Day6Part2Visualization : IDay
             // Add the current state to the set of visited states
             visitedStates.Add(currentState);
         }
+
+        return false; // No loop detected
     }
 
     /// <summary>
     /// Saves the current state of the map as an image using SkiaSharp.
     /// </summary>
-    private void SaveFrame(List<char[]> map, int guardX, int guardY, char guardDirection, HashSet<(int x, int y)> visitedPositions, int obstructionX, int obstructionY, int obstructionNumber, string filePath)
+    private void SaveFrame(List<char[]> map, int guardX, int guardY, char guardDirection, HashSet<(int x, int y)> visitedPositions, int obstructionX, int obstructionY, int obstructionNumber, (int x, int y, int directionIndex)? loopStartState, string filePath)
     {
         // Define cell size and image dimensions
         int cellSize = 20; // Size of each cell in pixels
@@ -214,6 +271,12 @@ public class Day6Part2Visualization : IDay
                         color = SKColors.LightGreen; // Visited positions
                     else if (x == guardX && y == guardY)
                         color = SKColors.Red; // Guard's current position
+
+                    // Highlight the loop start position in magenta
+                    if (loopStartState.HasValue && x == loopStartState.Value.x && y == loopStartState.Value.y)
+                    {
+                        color = SKColors.Magenta;
+                    }
 
                     // Draw the cell
                     using (var paint = new SKPaint { Color = color })
