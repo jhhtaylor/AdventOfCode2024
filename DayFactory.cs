@@ -23,6 +23,12 @@ public static class DayFactory
         {701, new Day7Visualization()},
         {702, new Day7Part2()},
         {703, new Day7Part2Visualization()},
+        {8, new Day8()},
+        {801, new Day8Visualization()},
+        {802,new Day8Part2()},
+        {803, new Day8Part2Visualization()},
+        {804, new Day8Part2VisualizationMonaLisa()},
+        {805, new Day8Part2VisualizationSunflower()}
     };
 
     public static IDay? GetDaySolution(int day)
