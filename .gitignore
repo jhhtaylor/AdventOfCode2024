@@ -11,6 +11,9 @@ obj/
 # Visual Studio Code settings
 .vscode/
 
+#Visual Studio settings
+.vs/
+
 # Rider / JetBrains settings
 .idea/
 *.sln.iml
